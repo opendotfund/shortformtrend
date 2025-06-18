@@ -1,35 +1,27 @@
-
-import React from 'react';
-import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import KeywordAnalysisPage from './pages/KeywordAnalysisPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-const KeywordAnalysisPageWrapper: React.FC = () => {
-  const { keyword } = useParams<{ keyword: string }>();
-  const navigate = useNavigate();
-
-  if (!keyword) {
-    navigate('/');
-    return null;
-  }
-  return <KeywordAnalysisPage keyword={decodeURIComponent(keyword)} />;
-};
-
-const App: React.FC = () => {
+function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/analysis/:keyword" element={<KeywordAnalysisPageWrapper />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
+    <ErrorBoundary>
+      <Router>
+        <div className="min-h-screen bg-slate-900 text-slate-200">
+          <Header />
+          <main className="container mx-auto px-4 py-8">
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/keyword/:keyword" element={<KeywordAnalysisPage />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
-};
+}
 
 export default App;
